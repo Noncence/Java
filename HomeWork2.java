@@ -1,4 +1,4 @@
-import java.util.Arrays;
+﻿import java.util.Arrays;
 
 public class HomeWork2 {
 
@@ -35,6 +35,10 @@ public class HomeWork2 {
         int[][] numbers4 = new int[6][6];
         for (int i = 0; i < numbers4.length; i++) {
             numbers4[i][i] = 1;
+
+	for (int i = 0; i < numbers4.length; i++) {
+            numbers4[i][numbers4.length - 1 - i] = 1;
+        }
         }
         for (int[] a : numbers4)
             System.out.println(Arrays.toString(a));
