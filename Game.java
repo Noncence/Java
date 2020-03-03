@@ -23,7 +23,7 @@ import java.util.Scanner;
                 int x = in.nextInt(), y = in.nextInt();
                 x--; y--;
                 if  (isValidStep(x, y, tab)) {
-                    tab[y][x] = DOT_X;
+                    tab[x][y] = DOT_X;
                     if (isWin(DOT_X, tab)) {
                         print(tab);
                         System.out.println("Вы победили");
@@ -35,7 +35,11 @@ import java.util.Scanner;
                         System.out.println("Ничья");
                         return;
                     }
-                    movePC(tab);
+                    // ИИ
+                    jarvisJr(tab);
+                    if (jarvisJr(tab) == false)
+                        movePC(tab);
+
                     System.out.println("Ход противника");
                     for (int i = 0; i < 7; i++) {
                         System.out.print(" * ");
@@ -50,7 +54,42 @@ import java.util.Scanner;
                 }
             }
         }
-
+        // Искусственный Интеллект (не очень умный, проверка только по горизонтали)
+        public static boolean jarvisJr (char [][] tab) {
+            int count = 0;
+            int j1 = 0;
+            int i1 = 0;
+            //Проверка ИИ совпадений по горизонтали
+            for (int i = 0; i < tab.length; i++){
+                for(int j = 0; j < tab.length; j++) {
+                    if (tab[i][j] == DOT_X) {
+                        count++;
+                        if (count == DOTS_TO_WIN -1) {
+                            j1 = j;
+                            i1 = i;
+                        }
+                    }
+                    if (tab[i][j] != DOT_X && count != DOTS_TO_WIN-1 ) {
+                        count= 0;
+                    }
+                    if (j == tab.length -1 && count != DOTS_TO_WIN-1) {
+                        count = 0;
+                    }
+                    if (count == DOTS_TO_WIN -1 && isValidStep(j1 + 1, i1, tab)) {
+                       // System.out.println("Компьютер походил в точку " + (j1+1+1) + " " + (i1+1));
+                        tab[i1][j1 + 1] = DOT_O;
+                        return true;
+                    }
+                    if (count == DOTS_TO_WIN -1 && isValidStep(j1 - (DOTS_TO_WIN - 1), i1, tab))  {
+                        //System.out.println("Компьютер походил в точку " + (j1-DOTS_TO_WIN) + " " + (i1 +1));
+                        tab[i1][j1-(DOTS_TO_WIN-1)] = DOT_O;
+                        return true;
+                    }
+                }
+                count = 0; j1 = 0; i1 = 0;
+            }
+            return false;
+        }
         private static boolean isWin(char ch, char[][] tab) {
             // горизонт
             int count = 0;
@@ -140,7 +179,7 @@ import java.util.Scanner;
             while (true) {
                 int x = rnd.nextInt(tab.length), y = rnd.nextInt(tab.length);
                 if (isValidStep(x, y, tab)) {
-                    tab[y][x] = DOT_O;
+                    tab[x][y] = DOT_O;
                     stepCounter++;
                     return;
                 }
